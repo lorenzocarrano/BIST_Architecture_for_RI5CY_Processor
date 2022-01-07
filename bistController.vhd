@@ -27,7 +27,7 @@ Entity bistController is
 		------------------
 		validity  : out std_logic;
 		clk_Out   : out std_logic;
-		TPG_ctrl  : out std_logic_vector(1 downto 0);
+		TPG_ctrl  : out std_logic_vector(2 downto 0);
 		ODE_ctrl  : out std_logic;
 		G_NGn     : out std_logic; --go/nogo  out
 		N_Tn      : out std_logic --test/normal mode
@@ -159,7 +159,8 @@ FSM_transitions:
 										
 										next_State <= idle;
 
-							WHEN testFailed => 
+							--WHEN testFailed => 
+							WHEN others =>
 										
 										next_State <= idle;
 										
@@ -187,7 +188,7 @@ FSM_outputs : PROCESS(current_state)
 		cntPattEn	<= '0';
 		cntUpdScan 	<= '0'; 
 		cntUpdPatt 	<= '0'; 
-		TPG_ctrl	<= "11"; 
+		TPG_ctrl	<= "011"; 
 		ODE_ctrl	<= '1';
 		validity	<= '0';
 		
@@ -203,19 +204,23 @@ FSM_outputs : PROCESS(current_state)
 			WHEN fill00 =>
 									
 									N_Tn 		<= '0';
-									TPG_ctrl	<= "00"; 
+									TPG_ctrl(1 downto 0)	
+												<= "00"; 
 			WHEN fill01 =>
 									
 									N_Tn 		<= '0';
-									TPG_ctrl	<= "00"; 
+									TPG_ctrl(1 downto 0)	
+												<= "00"; 
 			WHEN fill10 =>
 									
 									N_Tn 		<= '0';
-									TPG_ctrl	<= "01"; 
+									TPG_ctrl(1 downto 0)	
+												<= "01"; 
 			WHEN fill11 =>
 									
 									N_Tn 		<= '0';
-									TPG_ctrl	<= "01"; 
+									TPG_ctrl(1 downto 0)	
+												<= "01"; 
 									
 			WHEN chainCheck00 =>
 									
@@ -238,15 +243,20 @@ FSM_outputs : PROCESS(current_state)
 			WHEN scanIn =>
 									
 									N_Tn 		<= '0';
+									TPG_ctrl(1 downto 0)	
+												<= "10";
 			WHEN scanInOut =>
 									
 									N_Tn 		<= '0';
 									ODE_ctrl	<= '0'; 
+									TPG_ctrl(1 downto 0)	
+												<= "10";
 			WHEN capture =>
 									
 									ODE_ctrl	<= '0'; 
 									cntPattEn	<= '0';
 									cntUpScan 	<= to_unsigned(scanLength,9);
+									TPG_ctrl(2) <= '1';
 
 			WHEN testPassed =>
 			

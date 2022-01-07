@@ -7,6 +7,7 @@ Entity lfsr is
 	(
 		clock: in std_logic;
 		reset: in std_logic;
+		seed : in std_logic_vector(7 downto 0)
 		q    : out std_logic_vector(7 downto 0)
 	);
 
