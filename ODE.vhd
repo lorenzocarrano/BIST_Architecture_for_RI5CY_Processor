@@ -12,9 +12,9 @@ Entity ODE is
 	(
 		clk    : in  std_logic;
 		rst    : in  std_logic;
-		ctrl   : in  std_logic;
-		PPOs   : in  std_logic_vector(nScan -1 downto 0)
-		ODE_out: out std_logic;
+		ctrl   : in  std_logic_vector(1 downto 0);
+		PPOs   : in  std_logic_vector(nScan -1 downto 0);
+		ODE_out: out std_logic
 	);
 
 end ODE;
@@ -68,15 +68,27 @@ Architecture beh of comparator is
 
 	signal misrOut, romOut : std_logic_vector(7 downto 0);
 	signal romMemAddress   : std_logic_vector(nBitAddress -1 downto 0);
+	signal inA, inB        : std_logic_vector(7 downto 0);
 
 begin
+	
+	process(msrOut, romOut, ctrl)
+	begin
+		if ctrl(1)  = '1' then
+			inA <= msrOut;
+			inB <= romOut;
+		else
+			inA <= PPOs;
+			inB <= (others => ctrl(0));
+		end if;
+	end process;
 
 	misr_U : misr Port Map(clok => clk, reset => rst, input => PPOs, q => misrOut);
 	
-	cmp_U :  comparator Port Map(A => misrOut, B => romOut, cmpRs => ODE_out);
+	cmp_U :  comparator Port Map(A => inA, B => inB, cmpRs => ODE_out);
 
 	addrCnt: memAddressCounter Generic Map( N => 10)
-								  Port Map(clk => clk, rst => rst, cen => ctrl, q => romMemAddress);
+								  Port Map(clk => clk, rst => rst, cen => ctrl(1), q => romMemAddress);
 	
 	memory : ROM Generic Map(nBitAddress => nBitAddress)
 					Port Map(address => romMemAddress, dout => romOut);
