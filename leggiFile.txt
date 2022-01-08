@@ -1,0 +1,14 @@
+reading : process
+    file infile : text is in "file1.txt"; --declare input file 1987
+    variable inline: line; --line number declaration
+    variable dataread1 : real;
+    begin
+        wait until clk = '1' and clk'event;
+            if (not (endfile(infile)) then
+                    readline(infile, inline);
+                    read(inline, dataread1);
+                    d1 <=integer(dataread1);
+            else   
+                endoffile <='1'; --set signal to tell end of file read file is reached.
+        end if;
+    end process reading;
