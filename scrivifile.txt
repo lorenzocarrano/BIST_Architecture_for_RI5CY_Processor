@@ -1,0 +1,36 @@
+-- procedure WRITE(L : inout LINE; VALUE : in integer; JUSTIFIED: in SIDE := right; FIELD: in WIDTH := 0);
+.
+.
+signal o_valid        : std_logic;
+signal o_add          : std_logic_vector(7 downto 0);
+.
+.
+.
+p_dump  : process(i_rstb,i_clk)
+
+file test_vector      : text open write_mode is "output_file.txt";
+variable row          : line;
+
+begin
+
+  
+  if(i_rstb='0') then
+
+  ------------------------------------
+  elsif(rising_edge(i_clk)) then
+    
+    if(o_valid = '1') then
+    
+      write(row,o_add, right, 15);
+      
+      write(row,conv_integer(o_add), right, 15);
+
+      hwrite(row,o_add, right, 15);
+
+      hwrite(row,"00000000"&o_add, right, 15);
+      
+      writeline(test_vector,row);
+    
+    end if;
+  end if;
+end process p_dump;
