@@ -106,15 +106,14 @@ Architecture beh of lBist_topEntity is
 			irq_id_i              : in std_logic_vector(4 downto 0);
 			irq_id_o              : out std_logic_vector(4 downto 0);
 			ext_perf_counters_i   : in std_logic_vector(1 to 2);
-
 			clk_i                 : in std_logic;
 			rst_ni                : in std_logic;
-			lock_en_i             : in std_logic;
+			clock_en_i             : in std_logic;
 			test_en_i             : in std_logic; 
 			fregfile_disable_i    : in std_logic; 
 			instr_gnt_i           : in std_logic;
 				 instr_rvalid_i   : in std_logic;
-			ata_gnt_i             : in std_logic; 
+			data_gnt_i             : in std_logic; 
 			data_rvalid_i         : in std_logic; 
 			apu_master_gnt_i      : in std_logic;
 			apu_master_valid_i    : in std_logic; 
